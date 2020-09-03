@@ -7,7 +7,7 @@ import React, {
   useRef,
   useMemo,
   useCallback,
-  memo
+  memo,
 } from 'react';
 import MyContext from '../lib/my-context';
 
@@ -25,15 +25,19 @@ function countReducer(state, action) {
 function MyCountFun() {
   const context = useContext(MyContext);
   const inputRef = useRef();
-  const countRef = useRef();
-  countRef.current = count
   // const [count, setCount] = useState(0)
   const [count, dispatchCount] = useReducer(countReducer, 0);
   const [name, setName] = useState('jeck');
-  const config = useMemo(() => ({
-    text: `count is ${count}`,
-    color: count > 3 ? 'red' : 'blue'
-  }), [count]) 
+  const config = useMemo(
+    () => ({
+      text: `count is ${count}`,
+      color: count > 3 ? 'red' : 'blue',
+    }),
+    [count]
+  );
+
+  const countRef = useRef();
+  countRef.current = count;
 
   // useEffect(() => {
   //   const interval = setInterval(() => {
@@ -44,10 +48,10 @@ function MyCountFun() {
   // }, [])
 
   useEffect(() => {
-    console.log('effect');
-    console.log(inputRef);
+    // console.log('effect');
+    // console.log(inputRef);
     return () => {
-      console.log('effect deteched');
+      // console.log('effect deteched');
     };
   }, [count]);
 
@@ -60,14 +64,17 @@ function MyCountFun() {
   // }, [count])
 
   // const handleButtonClick = useCallback(() => dispatchCount({ type: 'add' }), [])
-  const handleButtonClick = useMemo(() => () => dispatchCount({ type: 'add' }), [])
+  const handleButtonClick = useMemo(
+    () => () => dispatchCount({ type: 'add' }),
+    []
+  );
   // 闭包问题处理
-  const handleAlertButtonClick = function() {
+  const handleAlertButtonClick = function () {
     setTimeout(() => {
-      alert(countRef.current)
-    }, 2000)
-  }
-  
+      alert(countRef.current);
+    }, 2000);
+  };
+
   return (
     <div>
       <input
@@ -75,10 +82,7 @@ function MyCountFun() {
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
-      <Child
-        config={config}
-        onButtonClick={handleButtonClick}
-      />
+      <Child config={config} onButtonClick={handleButtonClick} />
       <button onClick={handleAlertButtonClick}>alert button</button>
       {/* <button onClick={() => dispatchCount({ type: 'add' })}>{count}</button>
       <p>{context}</p> */}
@@ -91,7 +95,7 @@ const Child = memo(function Child({ config, onButtonClick }) {
     <button onClick={onButtonClick} style={{ color: config.color }}>
       {config.text}
     </button>
-  )
-})
+  );
+});
 
 export default MyCountFun;

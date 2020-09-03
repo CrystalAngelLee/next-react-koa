@@ -1,10 +1,9 @@
 import Link from 'next/link';
 import Router from 'next/router';
 import { Button } from 'antd';
-import {connect} from 'react-redux';
-import store from '../store/store'
+import { connect } from 'react-redux';
 
-const IndexPage = ({counter, add, rename, username}) => {
+const IndexPage = ({ counter, username, rename, add }) => {
   const gotoB = () => {
     Router.push(
       {
@@ -20,7 +19,7 @@ const IndexPage = ({counter, add, rename, username}) => {
   return (
     <>
       <Link href="/a?id=1" as="/a/1">
-  <Button>Coun: {counter}</Button>
+        <Button>counter: {counter}</Button>
       </Link>
       <Button onClick={gotoB}>toB</Button>
       112221
@@ -29,17 +28,20 @@ const IndexPage = ({counter, add, rename, username}) => {
     </>
   );
 };
-export default connect(function mapStateToProps(state) {
-  return {
-    counter: state.counter.count,
-    username: state.user.username,
+export default connect(
+  function mapStateToProps(state) {
+    return {
+      counter: state.counter.count,
+      username: state.user.username,
+    };
+  },
+  function mapDispatchToProps(dispatch) {
+    return {
+      add: (num) => dispatch({ type: 'ADD', num }),
+      rename: (name) => dispatch({ type: 'UPDATE_USERNAME', name }),
+    };
   }
-}, function mapDispatchToProps(dispatch) {
-  return {
-    add: (num) => dispatch({ type: 'ADD', num }),
-    rename: (name) => dispatch({ type: "UPDATE_USERNAME", name })
-  }
-})(IndexPage);
+)(IndexPage);
 
 // Link本身不作为任何节点，children 一定是单个节点
 // as : 路由映射

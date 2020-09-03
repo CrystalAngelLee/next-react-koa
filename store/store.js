@@ -1,69 +1,72 @@
-import {createStore, combineReducers, applyMiddleware} from 'redux';
-import ReduxThunk from 'redux-thunk'
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import ReduxThunk from 'redux-thunk';
 
 const initialState = {
-  count: 0
-}
+  count: 0,
+};
 const userInitialState = {
-  username:'jeck', age: '16'
-}
+  username: 'jeck',
+  age: '16',
+};
 
-const ADD= 'ADD'
+const ADD = 'ADD';
 function counterReducer(state = initialState, action) {
-  console.log(state, action)
   switch (action.type) {
     case ADD:
-      return { count: state.count + (action.num || 1) }
+      return { count: state.count + (action.num || 1) };
     default:
-      return state
+      return state;
   }
 }
 
-const UPDATE_USERNAME = 'UPDATE_USERNAME'
+const UPDATE_USERNAME = 'UPDATE_USERNAME';
 function userReducer(state = userInitialState, action) {
   switch (action.type) {
     case UPDATE_USERNAME:
       return {
         ...state,
-        username: action.name
-      }
-  
+        username: action.name,
+      };
+
     default:
-     return username
+      return state;
   }
 }
+
 const allReducers = combineReducers({
   counter: counterReducer,
-  user: userReducer
-})
-
+  user: userReducer,
+});
 
 // action creator
 function add(num) {
   return {
     type: ADD,
-    num
-  }
+    num,
+  };
 }
 
 function addAsync(num) {
   return (dispatch, getState) => {
     setTimeout(() => {
-      dispatch(add(num))
-    },1000)
-  }
+      dispatch(add(num));
+    }, 1000);
+  };
 }
 
-const store = createStore(allReducers, {counter:initialState, user: userInitialState}, applyMiddleware(ReduxThunk))
+const store = createStore(
+  allReducers,
+  { counter: initialState, user: userInitialState },
+  composeWithDevTools(applyMiddleware(ReduxThunk))
+);
 
-console.log(store, store.getState())
-store.dispatch(add(3))
-// store.dispatch({ type: 'ADD' })
-console.log(store, store.getState())
+console.log(store, store.getState());
+store.dispatch(add(3));
+console.log(store, store.getState());
 
-store.subscribe(() => {
-  console.log(store.getState())
-})
-store.dispatch(addAsync(5))
-// store.dispatch({ type: 'ADD' })
-export default store
+// store.subscribe(() => {
+//   console.log(store.getState());
+// });
+store.dispatch(addAsync(5));
+export default store;
