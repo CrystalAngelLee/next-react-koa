@@ -40,7 +40,7 @@ const allReducers = combineReducers({
 });
 
 // action creator
-function add(num) {
+export function add(num) {
   return {
     type: ADD,
     num,
@@ -55,18 +55,19 @@ function addAsync(num) {
   };
 }
 
-const store = createStore(
-  allReducers,
-  { counter: initialState, user: userInitialState },
-  composeWithDevTools(applyMiddleware(ReduxThunk))
-);
+// console.log(store, store.getState());
+// store.dispatch(add(3));
+// console.log(store, store.getState());
 
-console.log(store, store.getState());
-store.dispatch(add(3));
-console.log(store, store.getState());
-
-// store.subscribe(() => {
-//   console.log(store.getState());
-// });
-store.dispatch(addAsync(5));
-export default store;
+// // store.subscribe(() => {
+// //   console.log(store.getState());
+// // });
+// store.dispatch(addAsync(5));
+export default function initialStore(state) {
+  const store = createStore(
+    allReducers,
+    Object.assign({}, { counter: initialState, user: userInitialState }, state),
+    composeWithDevTools(applyMiddleware(ReduxThunk))
+  );
+  return store;
+}

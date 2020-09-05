@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Router from 'next/router';
 import { Button } from 'antd';
 import { connect } from 'react-redux';
+import { add } from '../store/store';
 
 const IndexPage = ({ counter, username, rename, add }) => {
   const gotoB = () => {
@@ -27,6 +28,11 @@ const IndexPage = ({ counter, username, rename, add }) => {
       <button onClick={() => add(counter)}>do add</button>
     </>
   );
+};
+
+IndexPage.getInitialProps = async ({ reduxStore }) => {
+  reduxStore.dispatch(add(3));
+  return {};
 };
 export default connect(
   function mapStateToProps(state) {
