@@ -117,4 +117,11 @@ Node 连接 redis=> ioredis
 
 使用 styled-component
 
-### lazyloading
+### OAuth 多种授权方式
+
+- Authorization Code
+- Refresh Token
+- Device Code
+- password(一般不会对第三方提供)
+- Implicit
+- Client Credentials
