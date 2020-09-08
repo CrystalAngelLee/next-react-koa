@@ -117,6 +117,8 @@ Node 连接 redis=> ioredis
 
 使用 styled-component
 
+## OAuth
+
 ### OAuth 多种授权方式
 
 - Authorization Code
@@ -125,3 +127,37 @@ Node 连接 redis=> ioredis
 - password(一般不会对第三方提供)
 - Implicit
 - Client Credentials
+
+### OAuth字段
+
+**跳转字段**
+
+client_id
+
+scope // 希望得到的授权  github developer--Authorizing OAuth Apps
+
+redirect_uri, login(是否允许用户通过登录进行授权), state(保证授权的安全性), allow_signup(是否允许用户在没有注册的情况下先注册在登陆授权)
+
+**请求token**
+
+client_id, client_secret（永久保存在服务端）
+
+code
+
+redirect_uri, state
+
+// 获取用户信息 https://api.github.com/user
+
+### OAuth Code 如何保证安全
+
+**策略**
+
+- 一次性的code
+
+- id+secret
+- redirect_uri
+
+### Cookie 和 Session
+
+cookie是存储在客户端的一个凭证
+

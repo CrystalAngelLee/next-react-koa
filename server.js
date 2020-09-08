@@ -10,6 +10,15 @@ app.prepare().then(() => {
   const server = new Koa();
   const router = new Router();
 
+  server.use(async (ctx, next) =>{
+    // 获取用户数据
+    ctx.session = ctx.session || {}
+    ctx.session.user = {
+      username: 'test'
+    }
+    await next();
+  })
+
   router.get('/a/:id', async (ctx) => {
     const id = ctx.params.id;
     await handle(ctx.req, ctx.res, {
@@ -21,12 +30,7 @@ app.prepare().then(() => {
   server.use(router.routes());
 
   server.use(async (ctx, next) => {
-    await next();
-  });
-
-  server.use(router.routes());
-
-  server.use(async (ctx, next) => {
+    ctx.cookies.set('id', 'userid: ***')
     await handle(ctx.req, ctx.res);
     ctx.respond = false;
   });
