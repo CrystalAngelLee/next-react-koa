@@ -1,4 +1,5 @@
 const withCss = require('@zeit/next-css');
+const config = require('./config');
 
 const configs = {
   // 编译文件的输出目录
@@ -28,7 +29,7 @@ const configs = {
     return config;
   },
   // 修改webpackDevMiddleware配置
-  webpackDevMiddleware: (config) => {
+  webpackDevMiddleware: config => {
     return config;
   },
   // 可以在页面上通过process.env.customKey获取value
@@ -48,7 +49,15 @@ const configs = {
 };
 
 if (typeof require !== 'undefined') {
-  require.extensions['.css'] = (file) => {};
+  require.extensions['.css'] = file => {};
 }
 
-module.exports = withCss({});
+const GITHUB_OAUTH_URL = 'https://github.com/login/oauth/authorize';
+const SCOPE = 'user';
+
+module.exports = withCss({
+  publicRuntimeConfig: {
+    GITHUB_OAUTH_URL,
+    OAUTH_URL: `${GITHUB_OAUTH_URL}?client_id=${config.github.client_id}&scope=${SCOPE}`,
+  },
+});

@@ -1,7 +1,14 @@
+import { useEffect } from 'react';
+import axios from 'axios';
+
 import Link from 'next/link';
 import Router from 'next/router';
 import { Button } from 'antd';
 import { connect } from 'react-redux';
+import getConfig from 'next/config';
+
+const { publicRuntimeConfig } = getConfig;
+
 import { add } from '../store/store';
 
 const IndexPage = ({ counter, username, rename, add }) => {
@@ -15,6 +22,11 @@ const IndexPage = ({ counter, username, rename, add }) => {
       },
       '/b/2'
     );
+    useEffect(() => {
+      axios.get('/api/user/info').then(resp => {
+        console.log('resp', resp);
+      });
+    }, []);
   };
 
   return (
@@ -24,8 +36,9 @@ const IndexPage = ({ counter, username, rename, add }) => {
       </Link>
       <Button onClick={gotoB}>toB</Button>
       112221
-      <input value={username} onChange={(e) => rename(e.target.value)}></input>
+      <input value={username} onChange={e => rename(e.target.value)}></input>
       <button onClick={() => add(counter)}>do add</button>
+      <a href={publicRuntimeConfig.OAUTH_URL}>login</a>
     </>
   );
 };
@@ -43,8 +56,8 @@ export default connect(
   },
   function mapDispatchToProps(dispatch) {
     return {
-      add: (num) => dispatch({ type: 'ADD', num }),
-      rename: (name) => dispatch({ type: 'UPDATE_USERNAME', name }),
+      add: num => dispatch({ type: 'ADD', num }),
+      rename: name => dispatch({ type: 'UPDATE_USERNAME', name }),
     };
   }
 )(IndexPage);
