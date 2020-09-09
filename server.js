@@ -19,6 +19,33 @@ app.prepare().then(() => {
     ctx.session.user = {
       username: 'test',
     };
+    server.keys = ['John develop github app'];
+    const SESSION_CONFIG = {
+      key: 'jid',
+      // store: {}
+    };
+  });
+
+  server.use(session(SESSION_CONFIG, server));
+
+  server.use(async (ctx, next) => {
+    // console.log(ctx.cookies.get('id'));
+    // 获取用户数据
+    // 如：调用`model.getUserById(id)`
+
+    // ctx.session = ctx.session || {};
+    // ctx.session.user = {
+    //   username: 'test',
+    //   age: 30,
+    // };
+    // if (!ctx.session.user) {
+    //   ctx.session.user = {
+    //     name: 'test',
+    //     age: 18,
+    //   }
+    // } else {
+    console.log(`session is: ${ctx.session}`);
+    // }
     await next();
   });
 
@@ -30,10 +57,17 @@ app.prepare().then(() => {
     });
     ctx.respond = false;
   });
+  router.get('/set/user', async ctx => {
+    ctx.session.user = {
+      name: 'test',
+      age: 18,
+    };
+    ctx.body = 'set body success';
+  });
   server.use(router.routes());
 
   server.use(async (ctx, next) => {
-    ctx.cookies.set('id', 'userid: ***');
+    ctx.cookies.set('id', 'userid: $$$');
     await handle(ctx.req, ctx.res);
     ctx.respond = false;
   });
