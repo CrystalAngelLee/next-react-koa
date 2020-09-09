@@ -1,6 +1,9 @@
 const Koa = require('koa');
 const Router = require('koa-router');
 const next = require('next');
+const session = require('koa-session');
+
+const RedisSessionStore = require('./server/session-store');
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -10,16 +13,16 @@ app.prepare().then(() => {
   const server = new Koa();
   const router = new Router();
 
-  server.use(async (ctx, next) =>{
+  server.use(async (ctx, next) => {
     // 获取用户数据
-    ctx.session = ctx.session || {}
+    ctx.session = ctx.session || {};
     ctx.session.user = {
-      username: 'test'
-    }
+      username: 'test',
+    };
     await next();
-  })
+  });
 
-  router.get('/a/:id', async (ctx) => {
+  router.get('/a/:id', async ctx => {
     const id = ctx.params.id;
     await handle(ctx.req, ctx.res, {
       pathname: '/a',
@@ -30,7 +33,7 @@ app.prepare().then(() => {
   server.use(router.routes());
 
   server.use(async (ctx, next) => {
-    ctx.cookies.set('id', 'userid: ***')
+    ctx.cookies.set('id', 'userid: ***');
     await handle(ctx.req, ctx.res);
     ctx.respond = false;
   });
