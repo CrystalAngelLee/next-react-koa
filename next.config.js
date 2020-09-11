@@ -29,7 +29,7 @@ const configs = {
     return config;
   },
   // 修改webpackDevMiddleware配置
-  webpackDevMiddleware: config => {
+  webpackDevMiddleware: (config) => {
     return config;
   },
   // 可以在页面上通过process.env.customKey获取value
@@ -49,7 +49,7 @@ const configs = {
 };
 
 if (typeof require !== 'undefined') {
-  require.extensions['.css'] = file => {};
+  require.extensions['.css'] = (file) => {};
 }
 
 const GITHUB_OAUTH_URL = 'https://github.com/login/oauth/authorize';

@@ -11,7 +11,7 @@ const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
-const redis = new Redis();
+const redis = new Redis({ port: 6381 });
 
 app.prepare().then(() => {
   const server = new Koa();
@@ -28,7 +28,7 @@ app.prepare().then(() => {
   // 配置处理github OAuth 的登录
   auth(server);
 
-  router.get('/a/:id', async ctx => {
+  router.get('/a/:id', async (ctx) => {
     const id = ctx.params.id;
     await handle(ctx.req, ctx.res, {
       pathname: '/a',
@@ -37,7 +37,7 @@ app.prepare().then(() => {
     ctx.respond = false;
   });
 
-  router.get('/api/user/info', async ctx => {
+  router.get('/api/user/info', async (ctx) => {
     const user = ctx.session.userInfo;
     if (!user) {
       ctx.status = 401;

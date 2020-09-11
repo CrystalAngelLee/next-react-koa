@@ -3,7 +3,7 @@ const config = require('../config');
 
 const { client_id, client_secret, request_token_url } = config.github;
 
-module.exports = server => {
+module.exports = (server) => {
   server.use(async (ctx, next) => {
     if (ctx.path === '/auth') {
       const code = ctx.query.code;
@@ -23,6 +23,8 @@ module.exports = server => {
           Accept: 'application/json',
         },
       });
+
+      console.log('result', result);
 
       if (result.status === 200 && result.data && !result.data.error) {
         ctx.session.githubAuth = result.data;
