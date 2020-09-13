@@ -1,7 +1,7 @@
 import App from 'next/app';
 import { Provider } from 'react-redux';
 import 'antd/dist/antd.css';
-import Layout from '../components/Layout';
+import MyContext from '../lib/my-context';
 import testHoc from '../lib/with-redux';
 
 class CustomApp extends App {
@@ -18,11 +18,11 @@ class CustomApp extends App {
   render() {
     const { Component, pageProps, reduxStore } = this.props;
     return (
-      <Layout>
-        <Provider store={reduxStore}>
+      <Provider store={reduxStore}>
+        <MyContext.Provider value={'test'}>
           <Component {...pageProps} />
-        </Provider>
-      </Layout>
+        </MyContext.Provider>
+      </Provider>
     );
   }
 }
